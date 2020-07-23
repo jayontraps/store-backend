@@ -30,7 +30,7 @@ const cartTotal = (cart) => {
 
   const subTotal = cartSubtotal(cart);
 
-  const shipping = shouldPayShipping(cart) ? SHIPPING_RATE : 0;
+  const shipping = shouldPayShipping(cart) ? Number(SHIPPING_RATE) : 0;
 
   const total = subTotal + cartTaxes(cart) + shipping;
 
