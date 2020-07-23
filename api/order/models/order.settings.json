@@ -14,9 +14,6 @@
       "via": "orders",
       "dominant": true
     },
-    "number": {
-      "type": "string"
-    },
     "total": {
       "type": "biginteger"
     },
@@ -33,6 +30,24 @@
     },
     "product_qty": {
       "type": "json"
+    },
+    "shipping_name": {
+      "type": "string"
+    },
+    "shipping_address": {
+      "type": "string"
+    },
+    "shipping_country": {
+      "type": "string"
+    },
+    "shipping_state": {
+      "type": "string"
+    },
+    "shipping_zip": {
+      "type": "string"
+    },
+    "payment_intent_id": {
+      "type": "string"
     }
   }
 }
