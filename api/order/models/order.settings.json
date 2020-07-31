@@ -48,6 +48,12 @@
     },
     "payment_intent_id": {
       "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "customer_order_id": {
+      "type": "string"
     }
   }
 }

@@ -66,6 +66,7 @@ module.exports = {
       paymentIntent,
 
       shipping_name,
+      email,
       shipping_address,
       shipping_state,
       shipping_country,
@@ -103,11 +104,12 @@ module.exports = {
 
     console.log("payment_intent_id: ", payment_intent_id);
     //Check if the data is proper
-    console.log("order.create cart", cart);
+    // console.log("order.create cart", cart);
     let product_qty = [];
     let products = [];
     let sanitizedCart = [];
 
+    //Fetch the products and add them to the products array, also set up product_qty
     await Promise.all(
       cart.map(async (product) => {
         const foundProduct = await strapi.services.product.findOne({
@@ -133,8 +135,6 @@ module.exports = {
     // console.log("order.create products", products);
     // console.log("order.create sanitizedCart", sanitizedCart);
 
-    //Fetch the products and add them to the products array, also set up product_qty
-
     let subtotal = parseInt(
       strapi.config.functions.cart.cartSubtotal(sanitizedCart)
     );
@@ -152,8 +152,12 @@ module.exports = {
       };
     }
 
+    // create a customer facing order id
+    const customer_order_id = Date.now().toString().slice(6, 13);
+
     const entry = {
       shipping_name,
+      email,
       shipping_address,
       shipping_state,
       shipping_country,
@@ -165,7 +169,7 @@ module.exports = {
       subtotal,
       taxes,
       total,
-
+      customer_order_id,
       payment_intent_id,
     };
 
