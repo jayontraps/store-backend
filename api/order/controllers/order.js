@@ -1,6 +1,7 @@
 "use strict";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const { sanitizeEntity } = require("strapi-utils");
+const { formatPrice } = require("../../utils/formatPrice");
 
 /**
  * Read the documentation (https://strapi.io/documentation/v3.x/concepts/controllers.html#core-controllers)
@@ -174,6 +175,56 @@ module.exports = {
     };
 
     const entity = await strapi.services.order.create(entry);
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = dd + "/" + mm + "/" + yyyy;
+
+    const emailData = {
+      products: sanitizedCart.map((product) => ({
+        name: product.name,
+        image: product.thumbnail.formats.thumbnail.url,
+        price: formatPrice(product.price),
+        quantity: product.qty,
+      })),
+      shipping_address: `${shipping_address}, ${shipping_state}, ${shipping_country}, ${shipping_zip}`,
+      order_date: today,
+      email,
+      shipping_name,
+      subtotal: formatPrice(subtotal),
+      taxes: formatPrice(taxes),
+      total: formatPrice(total),
+      customer_order_id,
+    };
+
+    console.log("emailData: ", emailData);
+
+    // send email notifying admin of purchase
+    // const adminEmail = await strapi.plugins["email"].services.email.send({
+    //   to: process.env.SENDGRID_DEFAULT_FROM,
+    //   from: process.env.SENDGRID_DEFAULT_FROM,
+    //   replyTo: process.env.SENDGRID_DEFAULT_FROM,
+    //   subject: "Order received",
+    //   text: "Hello world!",
+    //   html: "Hello world!",
+    // });
+    // console.log("adminEmail: ", adminEmail);
+
+    // send order confirmation to customer
+    const customerEmail = await strapi.plugins["email"].services.email.send({
+      to: email,
+      from: process.env.SENDGRID_DEFAULT_FROM,
+      replyTo: process.env.SENDGRID_DEFAULT_FROM,
+      subject: "Order received",
+      text: "Thank you world!",
+      html: "Thank you world!",
+      dynamic_template_data: emailData,
+      template_id: "d-41025348bd2d4f3087ad44eb3c50ea35",
+    });
+    console.log("customerEmail: ", customerEmail);
 
     return sanitizeEntity(entity, { model: strapi.models.order });
   },
