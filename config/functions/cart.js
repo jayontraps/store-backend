@@ -1,6 +1,6 @@
-const TAX_RATE = process.env.TAX_RATE || 0.1;
-const FREE_SHIPPING_THRESHOLD = process.env.FREE_SHIPPING_THRESHOLD || 10000;
-const SHIPPING_RATE = process.env.SHIPPING_RATE || 500;
+const TAX_RATE = process.env.TAX_RATE || 0;
+const FREE_SHIPPING_THRESHOLD = process.env.FREE_SHIPPING_THRESHOLD || 5000;
+const SHIPPING_RATE = process.env.SHIPPING_RATE || 350;
 
 const cartSubtotal = (cart) => {
   //Sum up all of the individual product costs
