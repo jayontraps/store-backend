@@ -2,6 +2,7 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const { sanitizeEntity } = require("strapi-utils");
 const { formatPrice } = require("../../utils/formatPrice");
+const SHIPPING_RATE = process.env.SHIPPING_RATE || 350;
 
 /**
  * Read the documentation (https://strapi.io/documentation/v3.x/concepts/controllers.html#core-controllers)
@@ -174,6 +175,8 @@ module.exports = {
       payment_intent_id,
     };
 
+    const shipping_cost = formatPrice(SHIPPING_RATE);
+
     const entity = await strapi.services.order.create(entry);
 
     var today = new Date();
@@ -182,6 +185,11 @@ module.exports = {
     var yyyy = today.getFullYear();
 
     today = dd + "/" + mm + "/" + yyyy;
+
+    const Sender_Name = "Ply Coasters";
+    const Sender_Address = "Sylvan Road";
+    const Sender_City = "London";
+    const Sender_Zip = "SE19 2RX";
 
     const emailData = {
       products: sanitizedCart.map((product) => ({
@@ -194,24 +202,32 @@ module.exports = {
       order_date: today,
       email,
       shipping_name,
+      shipping_cost,
       subtotal: formatPrice(subtotal),
       taxes: formatPrice(taxes),
       total: formatPrice(total),
       customer_order_id,
+      Sender_Name,
+      Sender_Address,
+      Sender_City,
+      Sender_Zip,
     };
 
     console.log("emailData: ", emailData);
 
+    const adminMsg = `Order received on ${today}. Order number ${customer_order_id}`;
+
     // send email notifying admin of purchase
-    // const adminEmail = await strapi.plugins["email"].services.email.send({
-    //   to: process.env.SENDGRID_DEFAULT_FROM,
-    //   from: process.env.SENDGRID_DEFAULT_FROM,
-    //   replyTo: process.env.SENDGRID_DEFAULT_FROM,
-    //   subject: "Order received",
-    //   text: "Hello world!",
-    //   html: "Hello world!",
-    // });
-    // console.log("adminEmail: ", adminEmail);
+    const adminEmail = await strapi.plugins["email"].services.email.send({
+      to: process.env.SENDGRID_DEFAULT_FROM,
+      from: process.env.SENDGRID_DEFAULT_FROM,
+      replyTo: process.env.SENDGRID_DEFAULT_FROM,
+      subject: "Order received",
+      text: adminMsg,
+      html: adminMsg,
+    });
+
+    console.log("adminEmail: ", adminEmail);
 
     // send order confirmation to customer
     const customerEmail = await strapi.plugins["email"].services.email.send({
