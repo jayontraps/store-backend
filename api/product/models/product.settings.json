@@ -18,7 +18,7 @@
     },
     "price": {
       "type": "biginteger",
-      "required": true
+      "required": false
     },
     "thumbnail": {
       "model": "file",
@@ -56,7 +56,7 @@
     },
     "number_in_set": {
       "type": "integer",
-      "required": true
+      "required": false
     },
     "product_type": {
       "model": "product-type",
@@ -65,12 +65,12 @@
     "width": {
       "default": 100,
       "type": "integer",
-      "required": true
+      "required": false
     },
     "height": {
       "type": "integer",
       "default": 100,
-      "required": true
+      "required": false
     }
   }
 }
