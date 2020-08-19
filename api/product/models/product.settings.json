@@ -10,24 +10,26 @@
   },
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "description": {
       "type": "richtext"
     },
     "price": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "required": true
     },
     "thumbnail": {
       "model": "file",
       "via": "related",
       "allowedTypes": [
-        "images",
         "files",
+        "images",
         "videos"
       ],
       "plugin": "upload",
-      "required": false
+      "required": true
     },
     "slug": {
       "type": "uid",
@@ -49,8 +51,26 @@
       "required": false
     },
     "orders": {
-      "via": "products",
-      "collection": "order"
+      "collection": "order",
+      "via": "products"
+    },
+    "number_in_set": {
+      "type": "integer",
+      "required": true
+    },
+    "product_type": {
+      "model": "product-type",
+      "via": "products"
+    },
+    "width": {
+      "default": 100,
+      "type": "integer",
+      "required": true
+    },
+    "height": {
+      "type": "integer",
+      "default": 100,
+      "required": true
     }
   }
 }
