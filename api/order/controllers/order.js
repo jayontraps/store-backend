@@ -238,7 +238,7 @@ module.exports = {
       text: "Thank you world!",
       html: "Thank you world!",
       dynamic_template_data: emailData,
-      template_id: "d-41025348bd2d4f3087ad44eb3c50ea35",
+      template_id: "d-94c52df148df4b76a6ea6596c997206a",
     });
     console.log("customerEmail: ", customerEmail);
 
