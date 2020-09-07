@@ -219,7 +219,7 @@ module.exports = {
 
     // send email notifying admin of purchase
     const adminEmail = await strapi.plugins["email"].services.email.send({
-      to: process.env.SENDGRID_DEFAULT_FROM,
+      to: process.env.SENDGRID_ADMIN,
       from: process.env.SENDGRID_DEFAULT_FROM,
       replyTo: process.env.SENDGRID_DEFAULT_FROM,
       subject: "Order received",
